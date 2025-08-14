@@ -2,13 +2,13 @@ POST http://localhost:3333/courses
 Content-Type: application/json
 
 {
-  "title": "Curso de Docker 5"
+  "title": "Curso de Cobol"
 }
 
 ###
 
-GET http://localhost:3333/courses
+GET http://localhost:3333/courses?orderBy=title
 
 ###
 
-GET http://localhost:3333/courses/3b342af9-9570-4537-9952-e98b740a98e8
+GET http://localhost:3333/courses/ed08672b-d8cd-473c-b6fd-3b8c9ccb457d
