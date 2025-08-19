@@ -1,9 +1,7 @@
 node_modules
 .git
-.env
-.env.test
+.env*
 coverage
-*.log
-*.test.ts
 vitest.config.ts
 requisicoes.http
+README.md
