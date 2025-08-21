@@ -1,8 +1,8 @@
 import { test, expect } from 'vitest'
 import request from 'supertest'
-import { server } from '../app.ts'
+import { server } from '../../app.ts'
 import { faker } from '@faker-js/faker'
-import { makeAuthenticatedUser } from '../tests/factories/make-user.ts'
+import { makeAuthenticatedUser } from '../../tests/factories/make-user.ts'
 
 test('create a course', async () => {
   await server.ready()

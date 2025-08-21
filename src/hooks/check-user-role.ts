@@ -1,5 +1,5 @@
 import type { FastifyRequest, FastifyReply } from 'fastify'
-import { getAuthenticatedUserFromRequest } from '../../utils/get-authenticated-user-from-request.ts'
+import { getAuthenticatedUserFromRequest } from '../utils/get-authenticated-user-from-request.ts'
 
 export function checkUserRole(role: 'student' | 'manager') {
   return async function (request: FastifyRequest, reply: FastifyReply) {
