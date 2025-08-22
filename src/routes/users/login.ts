@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import z from 'zod'
 import { eq } from 'drizzle-orm'
 import { verify } from 'argon2'
+import { checkEnv } from '../../utils/check-env.ts'
 
 export const loginRoute: FastifyPluginAsyncZod = async (server) => {
   server.post('/sessions', {
@@ -40,11 +41,9 @@ export const loginRoute: FastifyPluginAsyncZod = async (server) => {
       return reply.status(400).send({ message: 'Credenciais inválidas.' })
     }
 
-    if (!process.env.JWT_SECRET) {
-      throw new Error('JWT_SECRET must be set.')
-    }
+    const env = checkEnv('JWT_SECRET')
     
-    const token = jwt.sign({ sub: user.id, role: user.role }, process.env.JWT_SECRET)
+    const token = jwt.sign({ sub: user.id, role: user.role }, env)
   
     return reply.status(200).send({ token })
   })
