@@ -21,6 +21,19 @@ POST http://localhost:3333/sessions
 Content-Type: application/json
 
 {
-  "email": "Ofelia.Melo@live.com",
+  "email": "matheus.santos@live.com",
   "password": "123456"
+}
+
+
+###
+
+POST http://localhost:3333/users
+Content-Type: application/json
+
+{
+  "name": "matheus",
+  "email": "matheus.santos@live.com",
+  "password": "123456",
+  "role": "manager"
 }
