@@ -1,12 +1,10 @@
 import fastify from 'fastify'
 import { fastifySwagger } from '@fastify/swagger'
 import { validatorCompiler, serializerCompiler, type ZodTypeProvider, jsonSchemaTransform } from 'fastify-type-provider-zod'
-import { createCourseRoute } from './routes/courses/create-course.ts'
-import { getCourseByIdRoute } from './routes/courses/get-course-by-id.ts'
-import { getCoursesRoute } from './routes/courses/get-courses.ts'
 import scalarAPIReference from '@scalar/fastify-api-reference'
 import { routesUser } from './routes/users/routesUser.ts'
 import { routesCourse } from './routes/courses/routesCourse.ts'
+import fastifyRateLimit from '@fastify/rate-limit'
 
 const server = fastify({
   logger: {
@@ -19,6 +17,11 @@ const server = fastify({
     },
   },
 }).withTypeProvider<ZodTypeProvider>()
+
+server.register(fastifyRateLimit, {
+  max: 100,
+  timeWindow: '1 minute',
+})
 
 if (process.env.NODE_ENV === 'development') {
   server.register(fastifySwagger, {
