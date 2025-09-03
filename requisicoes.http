@@ -1,6 +1,6 @@
 POST http://localhost:3333/courses
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMjE4MDY2Yi1lN2ZiLTQzOTItYjM4Ny0zZWNlM2E0YjNiZmYiLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc1NTc5ODA2OX0._8P6QBqMNhwTc_Rg7Q2p1ZHCgM3JayI9YanbCDJiwN0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4ZjFjYTMyYS0wYWUyLTRhOWQtOTE4Mi05MTU1YjFiNDI4ZWUiLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc1Njg1MjU1N30.3TUJn2ctcVRX5CzcJc-_jBpYSKL9kEkB_n6h_ytmYdk
 
 {
   "title": "Curso de React"
@@ -13,8 +13,7 @@ GET http://localhost:3333/courses?orderBy=title
 ###
 
 GET http://localhost:3333/courses/b5696151-5a59-4354-ae6e-4c8aa470ca9c
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMjE4MDY2Yi1lN2ZiLTQzOTItYjM4Ny0zZWNlM2E0YjNiZmYiLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc1NTc5ODA2OX0._8P6QBqMNhwTc_Rg7Q2p1ZHCgM3JayI9YanbCDJiwN0
-
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjOWNmZjRiNy1lYzBhLTQ4ZWYtYmY0ZS1kNTY1OTcyZTFkMzciLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc1Njg1MzA3N30.5W3f6laQ6i3ZXqinhkHEZp9QDu64fCif7z344u9eR5E
 ###
 
 POST http://localhost:3333/sessions
@@ -33,7 +32,15 @@ Content-Type: application/json
 
 {
   "name": "matheus",
-  "email": "matheus.santos@live.com",
+  "email": "matheus.santos1@live.com",
   "password": "123456",
   "role": "manager"
 }
+
+
+###
+
+POST http://localhost:3333/enrollments/d0eb0200-6a17-4dc9-a978-35256f9b1c0a
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4ZjFjYTMyYS0wYWUyLTRhOWQtOTE4Mi05MTU1YjFiNDI4ZWUiLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc1NjkzNjczNX0.hs5NuOuPFTcgKp3uwoqIKuPQeXgm1yAhCApulIaWheU
+
+
