@@ -12,15 +12,15 @@ GET http://localhost:3333/courses?orderBy=title
 
 ###
 
-GET http://localhost:3333/courses/b5696151-5a59-4354-ae6e-4c8aa470ca9c
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjOWNmZjRiNy1lYzBhLTQ4ZWYtYmY0ZS1kNTY1OTcyZTFkMzciLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc1Njg1MzA3N30.5W3f6laQ6i3ZXqinhkHEZp9QDu64fCif7z344u9eR5E
+GET http://localhost:3333/courses/6e0081b6-693c-46e1-bc1a-05f04d1ebfa1
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NWQxOTI1ZC0zYWY1LTQ5NDctOWVkMS00NDg3NTVlM2Y1NjkiLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc1NzQ1MTc3NSwiZXhwIjoxNzU3NDUxODM1fQ.Fu1nKeVU1ofDNz4_LdY0zH_QD5lKliRLkGVrc7Vq_bA
 ###
 
 POST http://localhost:3333/sessions
 Content-Type: application/json
 
 {
-  "email": "matheus.santos@live.com",
+  "email": "matheus.santos1@live.com",
   "password": "123456"
 }
 

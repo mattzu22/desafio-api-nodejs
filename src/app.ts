@@ -6,6 +6,8 @@ import { routesUser } from './routes/users/routesUser.ts'
 import { routesCourse } from './routes/courses/routesCourse.ts'
 import fastifyRateLimit from '@fastify/rate-limit'
 
+import fastifyCookies from '@fastify/cookie'
+
 const server = fastify({
   logger: {
     transport: {
@@ -17,6 +19,8 @@ const server = fastify({
     },
   },
 }).withTypeProvider<ZodTypeProvider>()
+
+await server.register(fastifyCookies)
 
 server.register(fastifyRateLimit, {
   max: 100,

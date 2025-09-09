@@ -6,6 +6,7 @@ import z from 'zod'
 import { eq } from 'drizzle-orm'
 import { verify } from 'argon2'
 import { checkEnv } from '../../utils/check-env.ts'
+import { checkRequestJWT } from '../../hooks/check-request-jwt.ts'
 
 export const loginRoute: FastifyPluginAsyncZod = async (server) => {
   server.post('/sessions', {
@@ -16,14 +17,14 @@ export const loginRoute: FastifyPluginAsyncZod = async (server) => {
         email: z.email(),
         password: z.string(),
       }),
-      response: {
-        200: z.object({ token: z.string() }),
-        400: z.object({ message: z.string() }),
-      }
+      // response: {
+      //   200: z.object({ token: z.string() }),
+      //   400: z.object({ message: z.string() }),
+      // }
     },
   }, async (request, reply) => {
     const { email, password } = request.body
-  
+
     const result = await db
       .select()
       .from(users)
@@ -42,9 +43,52 @@ export const loginRoute: FastifyPluginAsyncZod = async (server) => {
     }
 
     const env = checkEnv('JWT_SECRET')
-    
-    const token = jwt.sign({ sub: user.id, role: user.role }, env)
-  
-    return reply.status(200).send({ token })
+
+    const accessToken = jwt.sign({ sub: user.id, role: user.role }, env, { expiresIn: '1m' })
+    const refreshToken = jwt.sign({ sub: user.id, role: user.role }, env, { expiresIn: '7d' })
+
+    return reply.setCookie('refreshToken', refreshToken, {
+      path: '/',
+      secure: true,
+      httpOnly: true,
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60
+    })
+      .status(200).send({ accessToken })
+  })
+}
+
+
+export const refreshTokenRoute: FastifyPluginAsyncZod = async (server) => {
+  server.post('/refresh', {
+    preHandler: [
+      checkRequestJWT,
+    ],
+    schema: {
+      tags: ['auth'],
+      summary: 'Refresh token',
+      response: {
+        200: z.object({ token: z.string() }),
+        400: z.object({ message: z.string() }),
+      }
+    },
+  }, async (request, reply) => {
+    const refreshToken = request.cookies.refreshToken
+
+    if (!refreshToken) {
+      return reply.status(400).send({ message: 'Refresh token not found.' })
+    }
+
+    try {
+      const env = checkEnv('JWT_SECRET')
+
+      const payload = jwt.verify(refreshToken, env) as { sub: string, role: string }
+
+      const newAccessToken = jwt.sign({ sub: payload.sub, role: payload.role }, env, { expiresIn: '1m' })
+
+      return reply.status(200).send({ token: newAccessToken })
+    } catch (error) {
+      return reply.status(400).send({ message: 'Invalid refresh token.' })
+    }
   })
 }
