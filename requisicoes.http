@@ -1,6 +1,14 @@
-POST http://localhost:3333/courses
+@baseUrl = http://localhost:3333
+@accessToken = {{authenticate.response.body.accessToken}}
+@tokenRefresh = {{authenticate.response.body.refreshToken}}
+
+
+#### CURSOS ####
+
+#### CRIAR CURSO
+POST {{baseUrl}}/courses
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4ZjFjYTMyYS0wYWUyLTRhOWQtOTE4Mi05MTU1YjFiNDI4ZWUiLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc1Njg1MjU1N30.3TUJn2ctcVRX5CzcJc-_jBpYSKL9kEkB_n6h_ytmYdk
+Authorization: {{accessToken}}
 
 {
   "title": "Curso de React"
@@ -8,15 +16,21 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4ZjFjYTMyYS0wYWUy
 
 ###
 
-GET http://localhost:3333/courses?orderBy=title
+#### PESQUISAR POR CURSOS
+GET {{baseUrl}}/courses?orderBy=title
 
 ###
 
-GET http://localhost:3333/courses/6e0081b6-693c-46e1-bc1a-05f04d1ebfa1
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NWQxOTI1ZC0zYWY1LTQ5NDctOWVkMS00NDg3NTVlM2Y1NjkiLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc1NzQ1MTc3NSwiZXhwIjoxNzU3NDUxODM1fQ.Fu1nKeVU1ofDNz4_LdY0zH_QD5lKliRLkGVrc7Vq_bA
+#### PESQUISAR POR UM CURSO
+GET {{baseUrl}}/courses/6e0081b6-693c-46e1-bc1a-05f04d1ebfa1
+Authorization: {{accessToken}}
 ###
 
-POST http://localhost:3333/sessions
+#### LOGIN ###
+
+####lOGAR USUARIO
+# @name authenticate
+POST {{baseUrl}}/sessions
 Content-Type: application/json
 
 {
@@ -27,7 +41,8 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:3333/users
+####CRIAR USUARIO
+POST {{baseUrl}}/users
 Content-Type: application/json
 
 {
@@ -36,11 +51,17 @@ Content-Type: application/json
   "password": "123456",
   "role": "manager"
 }
-
+#### ATUALIZAR TOKEN
 
 ###
+POST {{baseUrl}}/refreshToken
+Cookie: {{tokenRefresh}}
 
-POST http://localhost:3333/enrollments/d0eb0200-6a17-4dc9-a978-35256f9b1c0a
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4ZjFjYTMyYS0wYWUyLTRhOWQtOTE4Mi05MTU1YjFiNDI4ZWUiLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc1NjkzNjczNX0.hs5NuOuPFTcgKp3uwoqIKuPQeXgm1yAhCApulIaWheU
+
+#### MATRICULA ####
+###
+
+POST {{baseUrl}}/enrollments/d0eb0200-6a17-4dc9-a978-35256f9b1c0a
+Authorization: {{accessToken}}
 
 

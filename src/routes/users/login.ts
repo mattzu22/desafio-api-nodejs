@@ -54,41 +54,47 @@ export const loginRoute: FastifyPluginAsyncZod = async (server) => {
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60
     })
-      .status(200).send({ accessToken })
+      .status(200).send({ accessToken, refreshToken })
   })
 }
 
 
-export const refreshTokenRoute: FastifyPluginAsyncZod = async (server) => {
-  server.post('/refresh', {
-    preHandler: [
-      checkRequestJWT,
-    ],
-    schema: {
-      tags: ['auth'],
-      summary: 'Refresh token',
-      response: {
-        200: z.object({ token: z.string() }),
-        400: z.object({ message: z.string() }),
-      }
-    },
-  }, async (request, reply) => {
-    const refreshToken = request.cookies.refreshToken
+// export const refreshTokenRoute: FastifyPluginAsyncZod = async (server) => {
+//   server.post('/refreshToken', {
+//     preHandler: [
+//       checkRequestJWT,
+//     ],
+//     schema: {
+//       tags: ['auth'],
+//       summary: 'Refresh token',
+//       response: {
+//         200: z.object({ token: z.string() }),
+//         400: z.object({ message: z.string() }),
+//       }
+//     },
+//   }, async (request, reply) => {
+//     console.log('ENTROU NA REFRESH TOKEN');
+    
 
-    if (!refreshToken) {
-      return reply.status(400).send({ message: 'Refresh token not found.' })
-    }
+//     const refreshToken = request.cookies.refreshToken
 
-    try {
-      const env = checkEnv('JWT_SECRET')
+//     console.log('refreshToken', refreshToken);
+    
 
-      const payload = jwt.verify(refreshToken, env) as { sub: string, role: string }
+//     if (!refreshToken) {
+//       return reply.status(400).send({ message: 'Refresh token not found.' })
+//     }
 
-      const newAccessToken = jwt.sign({ sub: payload.sub, role: payload.role }, env, { expiresIn: '1m' })
+//     try {
+//       const env = checkEnv('JWT_SECRET')
 
-      return reply.status(200).send({ token: newAccessToken })
-    } catch (error) {
-      return reply.status(400).send({ message: 'Invalid refresh token.' })
-    }
-  })
-}
+//       const payload = jwt.verify(refreshToken, env) as { sub: string, role: string }
+
+//       const newAccessToken = jwt.sign({ sub: payload.sub, role: payload.role }, env, { expiresIn: '1m' })
+
+//       return reply.status(200).send({ token: newAccessToken })
+//     } catch (error) {
+//       return reply.status(400).send({ message: 'Invalid refresh token.' })
+//     }
+//   })
+// }
