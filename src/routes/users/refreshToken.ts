@@ -2,6 +2,7 @@ import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import z from "zod";
 import { checkEnv } from "../../utils/check-env.ts";
 import jwt from 'jsonwebtoken'
+import { BadRequestError } from "../../utils/erros.ts";
 
 export const refreshTokenRoute: FastifyPluginAsyncZod = async (server) => {
     server.post('/refreshToken', {
@@ -17,7 +18,7 @@ export const refreshTokenRoute: FastifyPluginAsyncZod = async (server) => {
         const refreshToken = request.headers.cookie
 
         if (!refreshToken) {
-            return reply.status(400).send({ message: 'Refresh token not found.' })
+            throw new BadRequestError('Refresh token not found.')
         }
 
         try {

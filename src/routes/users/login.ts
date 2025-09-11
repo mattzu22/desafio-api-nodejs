@@ -7,6 +7,7 @@ import { eq } from 'drizzle-orm'
 import { verify } from 'argon2'
 import { checkEnv } from '../../utils/check-env.ts'
 import { checkRequestJWT } from '../../hooks/check-request-jwt.ts'
+import { BadRequestError } from '../../utils/erros.ts'
 
 export const loginRoute: FastifyPluginAsyncZod = async (server) => {
   server.post('/sessions', {
@@ -17,10 +18,15 @@ export const loginRoute: FastifyPluginAsyncZod = async (server) => {
         email: z.email(),
         password: z.string(),
       }),
-      // response: {
-      //   200: z.object({ token: z.string() }),
-      //   400: z.object({ message: z.string() }),
-      // }
+    response: {
+  200: z.object({
+    accessToken: z.string(),
+    refreshToken: z.string(),
+  }),
+  400: z.object({
+    message: z.string(),
+  }),
+}
     },
   }, async (request, reply) => {
     const { email, password } = request.body
@@ -31,7 +37,7 @@ export const loginRoute: FastifyPluginAsyncZod = async (server) => {
       .where(eq(users.email, email))
 
     if (result.length === 0) {
-      return reply.status(400).send({ message: 'Credenciais inválidas.' })
+      throw new BadRequestError('Credenciais inválidas.')
     }
 
     const user = result[0]
@@ -39,7 +45,7 @@ export const loginRoute: FastifyPluginAsyncZod = async (server) => {
     const doesPasswordsMatch = await verify(user.password, password)
 
     if (!doesPasswordsMatch) {
-      return reply.status(400).send({ message: 'Credenciais inválidas.' })
+      throw new BadRequestError('Credenciais inválidas.')
     }
 
     const env = checkEnv('JWT_SECRET')
@@ -57,44 +63,3 @@ export const loginRoute: FastifyPluginAsyncZod = async (server) => {
       .status(200).send({ accessToken, refreshToken })
   })
 }
-
-
-// export const refreshTokenRoute: FastifyPluginAsyncZod = async (server) => {
-//   server.post('/refreshToken', {
-//     preHandler: [
-//       checkRequestJWT,
-//     ],
-//     schema: {
-//       tags: ['auth'],
-//       summary: 'Refresh token',
-//       response: {
-//         200: z.object({ token: z.string() }),
-//         400: z.object({ message: z.string() }),
-//       }
-//     },
-//   }, async (request, reply) => {
-//     console.log('ENTROU NA REFRESH TOKEN');
-    
-
-//     const refreshToken = request.cookies.refreshToken
-
-//     console.log('refreshToken', refreshToken);
-    
-
-//     if (!refreshToken) {
-//       return reply.status(400).send({ message: 'Refresh token not found.' })
-//     }
-
-//     try {
-//       const env = checkEnv('JWT_SECRET')
-
-//       const payload = jwt.verify(refreshToken, env) as { sub: string, role: string }
-
-//       const newAccessToken = jwt.sign({ sub: payload.sub, role: payload.role }, env, { expiresIn: '1m' })
-
-//       return reply.status(200).send({ token: newAccessToken })
-//     } catch (error) {
-//       return reply.status(400).send({ message: 'Invalid refresh token.' })
-//     }
-//   })
-// }

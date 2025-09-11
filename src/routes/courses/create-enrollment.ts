@@ -5,6 +5,7 @@ import { getAuthenticatedUserFromRequest } from "../../utils/get-authenticated-u
 import { db } from "../../database/client.ts";
 import { enrollments } from "../../database/schema.ts";
 import { and, eq } from "drizzle-orm";
+import { BadRequestError } from "../../utils/erros.ts";
 
 export const createEnrollmentRoute: FastifyPluginAsyncZod = async (server) => {
     server.post('/enrollments/:courseId', {
@@ -36,7 +37,7 @@ export const createEnrollmentRoute: FastifyPluginAsyncZod = async (server) => {
                 ))
 
         if (existingEnrollment.length > 0) {
-            return reply.status(400).send({ message: 'Você já se inscreveu neste curso.' })
+            throw new BadRequestError('Você já se inscreveu neste curso.')
         }
 
         const result = await db

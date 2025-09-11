@@ -4,6 +4,7 @@ import { users } from "../../database/schema.ts";
 import { eq } from "drizzle-orm";
 import { hash } from "argon2";
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
+import { BadRequestError } from "../../utils/erros.ts";
 
 export const createUserRouter: FastifyPluginAsyncZod =
     async (server) => {
@@ -33,7 +34,7 @@ export const createUserRouter: FastifyPluginAsyncZod =
                 .limit(1);
 
             if (existingEmail.length > 0) {
-                return reply.status(400).send({ message: 'Email já existe' });
+                throw new BadRequestError('Email já existe');
             }
 
             const passwordHash = await hash(password);
